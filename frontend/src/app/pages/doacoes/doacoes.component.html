@@ -1,0 +1,61 @@
+<main class="doacoes-container" role="main" aria-label="Campanhas de doacao e apoio a animais de Sorocaba">
+  <h1 class="doacoes-title">Apoio e Doacoes</h1>
+  <p class="doacoes-subtitle">
+    Ajude a manter os abrigos de Sorocaba abastecidos com alimentos e assistencia veterinaria.
+  </p>
+
+  <div class="alerta-academico" role="note">
+    <strong>AVISO DE CONFORMIDADE:</strong> Todos os dados, chaves e campanhas apresentados sao estritamente ficticios para fins de avaliacao academica. Nao ha transacoes financeiras reais no Petbell.
+  </div>
+
+  <div *ngIf="carregando" class="loading-state" aria-live="polite">
+    Carregando campanhas solidarias...
+  </div>
+
+  <div *ngIf="!carregando" class="campanhas-list">
+    <article *ngFor="let camp of campanhas" class="campanha-card">
+      <h2 class="campanha-titulo">{{ camp.titulo }}</h2>
+      <p class="campanha-ong">Responsavel: {{ camp.ong_responsavel }}</p>
+      <p class="campanha-descricao">{{ camp.descricao }}</p>
+
+      <!-- Progresso de Racao Arrecadada -->
+      <div class="meta-box" *ngIf="camp.meta_mensal_kg">
+        <div class="meta-rotulo">
+          <span>Meta Mensal de Racao: {{ camp.meta_mensal_kg }} kg</span>
+          <span>Arrecadado: {{ camp.arrecadado_kg }} kg</span>
+        </div>
+        <div class="barra-fundo" role="progressbar" [attr.aria-valuenow]="(camp.arrecadado_kg / camp.meta_mensal_kg) * 100" aria-valuemin="0" aria-valuemax="100">
+          <div class="barra-progresso" [style.width.%]="(camp.arrecadado_kg / camp.meta_mensal_kg) * 100"></div>
+        </div>
+      </div>
+
+      <!-- Chave PIX Ficticia -->
+      <div class="pix-box">
+        <label>Chave Solidaria ({{ camp.chave_pix_tipo }})</label>
+        <div class="pix-chave-texto">{{ camp.chave_pix }}</div>
+        <button
+          type="button"
+          class="btn-copiar-chave"
+          (click)="copiarChavePix(camp)"
+          aria-label="Copiar chave pix ficticia"
+        >
+          {{ chaveCopiadaId === camp.id ? 'Chave Copiada!' : 'Copiar Chave Ficticia' }}
+        </button>
+      </div>
+
+      <!-- Ponto de Coleta Presencial de Racao em Sorocaba -->
+      <div class="coleta-box">
+        <strong>Ponto de Coleta Presencial de Suprimentos:</strong>
+        <p>{{ camp.ponto_coleta_presencial }}</p>
+      </div>
+
+      <!-- Itens Prioritarios -->
+      <div class="itens-box" *ngIf="camp.itens_prioritarios">
+        <strong>Itens de maior urgencia:</strong>
+        <ul>
+          <li *ngFor="let item of camp.itens_prioritarios">{{ item }}</li>
+        </ul>
+      </div>
+    </article>
+  </div>
+</main>

@@ -1,0 +1,158 @@
+<main class="detalhes-container" role="main" aria-label="Detalhes da ocorrencia e gestao de status">
+  <div *ngIf="carregando" class="loading-state" aria-live="polite">
+    Carregando informacoes da ocorrencia...
+  </div>
+
+  <div *ngIf="!carregando && alerta" class="detalhes-content">
+    <!-- Indicativo do Papel Atual do Usuario Conectado -->
+    <div class="role-toggle" role="status">
+      <span>
+        Perfil Atual:
+        <strong>
+          {{ authService.getUsuarioAtual() ? authService.getUsuarioAtual()?.tipo?.toUpperCase() : 'VISITANTE (NAO LOGADO)' }}
+        </strong>
+      </span>
+      <a *ngIf="!authService.estaAutenticado()" routerLink="/login" class="link-login-role">
+        Fazer Login
+      </a>
+    </div>
+
+    <!-- Foto Ampliada do Animal -->
+    <div class="detail-img-wrapper">
+      <img
+        *ngIf="alerta.foto_url; else semFotoAmpliada"
+        [src]="alerta.foto_url"
+        [alt]="'Foto ampliada de ' + alerta.titulo"
+        class="detail-img"
+      />
+      <ng-template #semFotoAmpliada>
+        <div class="detail-img-placeholder">
+          Foto Ampliada: {{ alerta.titulo }}
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Badge de Status Atual em Alto Contraste -->
+    <div class="status-badge-wrapper">
+      <span class="badge" [ngClass]="obterClasseBadge(alerta.status_pet)">
+        STATUS: {{ alerta.status_pet }}
+      </span>
+    </div>
+
+    <!-- Titulo e Dados Principais -->
+    <h1 class="detalhe-titulo">{{ alerta.titulo }}</h1>
+
+    <div class="info-box">
+      <div class="info-row">
+        <strong>Localizacao:</strong> {{ alerta.localizacao }}
+      </div>
+      <div class="info-row">
+        <strong>Coordenadas:</strong> Lat {{ alerta.latitude }}, Lng {{ alerta.longitude }}
+      </div>
+      <div class="info-row">
+        <strong>Data do Alerta:</strong> {{ alerta.created_at | date:'dd/MM/yyyy às HH:mm' }}
+      </div>
+      <div class="info-row" *ngIf="alerta.pet?.especie">
+        <strong>Especie:</strong> {{ alerta.pet?.especie }} (Raca: {{ alerta.pet?.raca || 'Mestico' }})
+      </div>
+      <div class="info-descricao">
+        <strong>Descricao:</strong>
+        <p>{{ alerta.descricao }}</p>
+      </div>
+    </div>
+
+    <!-- Gestao de Status (Exclusivo para ONGs, Administradores ou Tutor Original) -->
+    <section class="gestao-box" *ngIf="podeAlterarStatus()" aria-label="Gestao de status da ocorrencia">
+      <h2 class="gestao-titulo">Atualizar Situacao do Animal</h2>
+      <div class="botoes-status-grid">
+        <button
+          type="button"
+          class="btn-status-acao btn-resgatado"
+          (click)="salvarNovoStatus('RESGATADO')"
+          [disabled]="atualizandoStatus || alerta.status_pet === 'RESGATADO'"
+        >
+          Marcar como RESGATADO
+        </button>
+        <button
+          type="button"
+          class="btn-status-acao btn-adocao"
+          (click)="salvarNovoStatus('ADOCAO')"
+          [disabled]="atualizandoStatus || alerta.status_pet === 'ADOCAO'"
+        >
+          Disponibilizar para ADOCAO
+        </button>
+        <button
+          type="button"
+          class="btn-status-acao btn-adotado"
+          (click)="salvarNovoStatus('ADOTADO')"
+          [disabled]="atualizandoStatus || alerta.status_pet === 'ADOTADO'"
+        >
+          Confirmar ADOTADO
+        </button>
+      </div>
+    </section>
+
+    <!-- Chat Comunitario para Proteger a Privacidade dos Usuarios -->
+    <section class="chat-section" aria-label="Chat comunitario da ocorrencia">
+      <div class="chat-header">
+        <h2 class="chat-title">Chat da Comunidade</h2>
+        <span class="chat-badge">{{ mensagens.length }} mensagens</span>
+      </div>
+      <p class="chat-aviso">
+        Converse com vizinhos e protetores sem expor seu numero de telefone pessoal publicamente.
+      </p>
+
+      <div class="mensagens-container" role="log" aria-live="polite">
+        <div *ngIf="mensagens.length === 0" class="chat-vazio">
+          Nenhuma mensagem ainda. Envie a primeira mensagem para colaborar com o resgate!
+        </div>
+
+        <article *ngFor="let msg of mensagens" class="mensagem-item">
+          <div class="mensagem-cabecalho">
+            <span class="mensagem-autor">{{ msg.autor_nome }}</span>
+            <span class="mensagem-tag" *ngIf="msg.autor_tipo === 'ong'">ONG</span>
+            <span class="mensagem-hora">{{ msg.created_at | date:'HH:mm' }}</span>
+          </div>
+          <p class="mensagem-conteudo">{{ msg.conteudo }}</p>
+        </article>
+      </div>
+
+      <!-- Formulario de Envio de Mensagem -->
+      <form class="chat-form" (ngSubmit)="enviarMensagemChat()">
+        <div *ngIf="!authService.estaAutenticado()" class="form-group" style="margin-bottom: 8px;">
+          <input
+            type="text"
+            [(ngModel)]="nomeAutorAnonimo"
+            name="autorNome"
+            placeholder="Seu nome ou apelido (opcional)"
+          />
+        </div>
+        <div class="chat-input-row">
+          <input
+            type="text"
+            [(ngModel)]="textoNovaMensagem"
+            name="conteudoMsg"
+            placeholder="Escreva uma informacao sobre o animal..."
+            required
+            minlength="2"
+          />
+          <button
+            type="submit"
+            class="btn-enviar-chat"
+            [disabled]="enviandoMensagem || !textoNovaMensagem.trim()"
+            aria-label="Enviar mensagem no chat"
+          >
+            Enviar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Botao de Voltar ao Feed -->
+    <div style="margin-top: 16px;">
+      <a routerLink="/feed" class="btn-voltar">
+        Voltar ao Feed de Ocorrencias
+      </a>
+    </div>
+  </div>
+</main>

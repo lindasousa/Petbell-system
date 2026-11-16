@@ -1,0 +1,60 @@
+# ============================================================
+# Petbell - Arquivo .gitignore Oficial
+# ============================================================
+
+# Dependencias (Nao devem subir para o repositorio)
+node_modules/
+*/node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Variaveis de Ambiente e Segredos (NUNCA subir para o GitHub)
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+!backend/.env.example
+
+# Compilacao e Builds do Frontend (Angular)
+dist/
+frontend/dist/
+.angular/
+frontend/.angular/
+tmp/
+out-tsc/
+bazel-out/
+
+# Logs e Relatorios de Execucao
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+angular-errors.log
+
+# Caches de Ferramentas
+.cache/
+.npm/
+.eslintcache
+
+# Configuracoes de IDE e Editores de Codigo
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Arquivos de Sistema Operacional (Windows / MacOS / Linux)
+Thumbs.db
+Desktop.ini
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes

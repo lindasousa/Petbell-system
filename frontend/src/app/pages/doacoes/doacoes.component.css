@@ -1,0 +1,140 @@
+.doacoes-container {
+  padding: 16px;
+  padding-bottom: 84px;
+}
+
+.doacoes-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.doacoes-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+.alerta-academico {
+  background-color: var(--accent-bg);
+  border: 1.5px solid var(--accent);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: #713F12;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.campanhas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.campanha-card {
+  background-color: var(--bg-white);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.campanha-titulo {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+}
+
+.campanha-ong {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 8px;
+}
+
+.campanha-descricao {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.meta-box {
+  margin-bottom: 14px;
+}
+
+.meta-rotulo {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.barra-fundo {
+  width: 100%;
+  height: 12px;
+  background-color: #E2E8F0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.barra-progresso {
+  height: 100%;
+  background-color: var(--primary);
+  border-radius: 6px;
+  transition: width 0.3s;
+}
+
+.pix-box {
+  background-color: #F8FAFC;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.pix-chave-texto {
+  font-family: monospace;
+  font-size: 0.8rem;
+  word-break: break-all;
+  background-color: #FFFFFF;
+  padding: 8px;
+  border: 1px dashed var(--border);
+  border-radius: 4px;
+  margin: 6px 0 10px 0;
+  color: var(--text-dark);
+}
+
+.btn-copiar-chave {
+  width: 100%;
+  min-height: 44px;
+  background-color: var(--primary);
+  color: #FFFFFF;
+  font-weight: 800;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-copiar-chave:hover {
+  background-color: var(--primary-dark);
+}
+
+.coleta-box,
+.itens-box {
+  background-color: #F8FAFC;
+  border-radius: 6px;
+  padding: 10px;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+}
+
+.itens-box ul {
+  padding-left: 18px;
+  margin-top: 4px;
+}

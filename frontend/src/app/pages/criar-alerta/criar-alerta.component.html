@@ -1,0 +1,148 @@
+<main class="criar-container" role="main" aria-label="Formulario de publicacao de alerta de animal">
+  <h1 class="page-title">Novo Alerta de Pet</h1>
+  <p class="page-subtitle">
+    Registre o animal avistado rapidamente. Nao e necessario cadastro para publicar.
+  </p>
+
+  <form [formGroup]="formulario" (ngSubmit)="submeter()" novalidate>
+    <!-- Campo: Titulo da Ocorrencia -->
+    <div class="form-group">
+      <label for="titulo">Titulo da Ocorrencia *</label>
+      <input
+        type="text"
+        id="titulo"
+        formControlName="titulo"
+        placeholder="Ex: Cao vira-lata amarelo avistado"
+        [class.error-input]="f['titulo'].invalid && f['titulo'].touched"
+        aria-describedby="erro-titulo"
+      />
+      <div
+        id="erro-titulo"
+        class="error-msg"
+        *ngIf="f['titulo'].invalid && f['titulo'].touched"
+        role="alert"
+      >
+        <span class="error-badge">AVISO</span>
+        Digite um titulo com mais de 5 caracteres (maximo 100).
+      </div>
+    </div>
+
+    <!-- Campo: Bairro / Localizacao -->
+    <div class="form-group">
+      <label for="localizacao">Bairro / Localizacao em Sorocaba *</label>
+      <input
+        type="text"
+        id="localizacao"
+        formControlName="localizacao"
+        placeholder="Ex: Parque Campolim, Sorocaba - SP"
+        [class.error-input]="f['localizacao'].invalid && f['localizacao'].touched"
+        aria-describedby="erro-localizacao"
+      />
+      <div
+        id="erro-localizacao"
+        class="error-msg"
+        *ngIf="f['localizacao'].invalid && f['localizacao'].touched"
+        role="alert"
+      >
+        <span class="error-badge">AVISO</span>
+        Informe o bairro ou ponto de referencia (minimo 3 caracteres).
+      </div>
+    </div>
+
+    <!-- Campo: Descricao Completa -->
+    <div class="form-group">
+      <label for="descricao">Descricao Detalhada do Animal *</label>
+      <textarea
+        id="descricao"
+        rows="3"
+        formControlName="descricao"
+        placeholder="Informe caracteristicas fisicas, se esta ferido, com fome ou usando coleira..."
+        [class.error-input]="f['descricao'].invalid && f['descricao'].touched"
+        aria-describedby="erro-descricao"
+      ></textarea>
+      <div
+        id="erro-descricao"
+        class="error-msg"
+        *ngIf="f['descricao'].invalid && f['descricao'].touched"
+        role="alert"
+      >
+        <span class="error-badge">AVISO</span>
+        A descricao deve ter no minimo 10 caracteres.
+      </div>
+    </div>
+
+    <!-- Campo: Status da Ocorrencia -->
+    <div class="form-group">
+      <label for="status_pet">Situacao do Animal *</label>
+      <select id="status_pet" formControlName="status_pet">
+        <option value="ABANDONADO">Animal Abandonado / Na Rua</option>
+        <option value="PERDI_MEU_PET">Perdi Meu Pet (Busca por Dono)</option>
+        <option value="ADOCAO">Disponivel para Adoção Provisoria</option>
+        <option value="RESGATADO">Animal Ja Resgatado</option>
+      </select>
+    </div>
+
+    <!-- Campo: Anexo de Foto do Animal -->
+    <div class="form-group">
+      <label for="input-foto">Foto do Animal</label>
+      
+      <div *ngIf="previewFoto" class="preview-box">
+        <img [src]="previewFoto" alt="Previa da foto do animal anexada" class="img-preview" />
+      </div>
+
+      <input
+        type="file"
+        id="input-foto"
+        accept="image/*"
+        class="sr-only"
+        (change)="aoSelecionarArquivo($event)"
+      />
+      
+      <label for="input-foto" class="btn-file" role="button" tabindex="0">
+        Selecionar Imagem do Dispositivo
+      </label>
+
+      <!-- Alternativa: Colar URL de Imagem se preferir -->
+      <div style="margin-top: 8px;">
+        <input
+          type="text"
+          formControlName="foto_url"
+          placeholder="Ou cole o link direto de uma foto online (opcional)"
+        />
+      </div>
+    </div>
+
+    <!-- Campo: Geolocalizacao Interativa -->
+    <div class="form-group">
+      <div class="gps-header">
+        <label>Geolocalizacao do Animal</label>
+        <button
+          type="button"
+          class="btn-gps"
+          (click)="capturarLocalizacaoAtual()"
+          [disabled]="capturandoGps"
+        >
+          {{ capturandoGps ? 'Obtendo GPS...' : 'Usar Meu GPS Atual' }}
+        </button>
+      </div>
+
+      <!-- Componente de Mapa para Selecao de Ponto -->
+      <app-mapa
+        [modoSelecao]="true"
+        [latitudeInicial]="f['latitude'].value"
+        [longitudeInicial]="f['longitude'].value"
+        (coordenadaSelecionada)="onCoordenadaSelecionada($event)"
+      ></app-mapa>
+
+      <div class="coordenadas-display">
+        <span>Lat: {{ f['latitude'].value }}</span>
+        <span>Lng: {{ f['longitude'].value }}</span>
+      </div>
+    </div>
+
+    <!-- Botao de Envio -->
+    <button type="submit" class="btn-submit" [disabled]="enviando">
+      {{ enviando ? 'Publicando Alerta...' : 'Publicar Alerta' }}
+    </button>
+  </form>
+</main>

@@ -1,0 +1,97 @@
+// Definicao do Gerador do Prisma Client
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Conexao com a fonte de dados PostgreSQL com suporte a PostGIS
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Enumerador oficial de Status para Pets e Alertas
+enum StatusPet {
+  RESGATADO
+  ADOTADO
+  ADOCAO
+  ABANDONADO
+  PERDI_MEU_PET
+}
+
+// Modelo de Usuario (Cidadao, ONG ou Administrador)
+model Usuario {
+  id         Int       @id @default(autoincrement())
+  nome       String
+  tipo       String    // "cidadao", "ong", "administrador"
+  email      String    @unique
+  senha_hash String
+  telefone   String
+  created_at DateTime  @default(now())
+
+  // Relacionamentos opcionais (1 usuario pode ter varios pets e alertas)
+  pets       Pet[]
+  alertas    Alerta[]
+
+  @@map("usuarios")
+}
+
+// Modelo de Perfil do Pet
+model Pet {
+  id         Int        @id @default(autoincrement())
+  nome       String?
+  especie    String?
+  raca       String?
+  idade      Int?
+  foto_url   String?
+  status_pet StatusPet  @default(ABANDONADO)
+  created_at DateTime   @default(now())
+
+  // Chave estrangeira nula: permite criacao de alerta de animal sem usuario cadastrado
+  usuario_id Int?
+  usuario    Usuario?   @relation(fields: [usuario_id], references: [id], onDelete: SetNull)
+
+  // Relacionamento com Alertas associados a este Pet
+  alertas    Alerta[]
+
+  @@map("pets")
+}
+
+// Modelo de Alerta de Ocorrencia de Animal
+model Alerta {
+  id          Int                  @id @default(autoincrement())
+  titulo      String               @db.VarChar(100)
+  descricao   String               @db.Text
+  localizacao String
+  latitude    Float
+  longitude   Float
+  foto_url    String?
+  status_pet  StatusPet            @default(ABANDONADO)
+  created_at  DateTime             @default(now())
+
+  // Chave estrangeira nula: permite geracao rapida de alerta sem cadastro previo
+  usuario_id  Int?
+  usuario     Usuario?             @relation(fields: [usuario_id], references: [id], onDelete: SetNull)
+
+  // Vinculo opcional com a tabela Pet
+  pet_id      Int?
+  pet         Pet?                 @relation(fields: [pet_id], references: [id], onDelete: Cascade)
+
+  // Mensagens do chat comunitario deste alerta
+  mensagens   MensagemComunidade[]
+
+  @@index([latitude, longitude], name: "idx_alerta_coordenadas")
+  @@map("alertas")
+}
+
+// Modelo para o Chat Comunitario do Alerta (evita exposicao de telefones publicos)
+model MensagemComunidade {
+  id         Int      @id @default(autoincrement())
+  alerta_id  Int
+  alerta     Alerta   @relation(fields: [alerta_id], references: [id], onDelete: Cascade)
+  autor_nome String
+  autor_tipo String   @default("comunidade") // "comunidade", "ong", "tutor"
+  conteudo   String   @db.Text
+  created_at DateTime @default(now())
+
+  @@map("mensagens_comunidade")
+}

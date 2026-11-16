@@ -1,0 +1,49 @@
+.cadastro-container {
+  padding: 24px 16px;
+  padding-bottom: 84px;
+}
+
+.cadastro-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.cadastro-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.lgpd-box {
+  background-color: #F8FAFC;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  color: var(--text-dark);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.cadastro-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.link-voltar-login {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--primary-dark);
+  font-weight: 800;
+  text-decoration: underline;
+  min-height: 44px;
+  line-height: 44px;
+}

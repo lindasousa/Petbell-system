@@ -1,0 +1,125 @@
+.modal-simulador-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.simulador-painel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 95vh;
+}
+
+.simulador-toolbar {
+  width: 398px;
+  background-color: #1E293B;
+  color: #FFFFFF;
+  padding: 8px 12px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  border: 4px solid var(--primary-dark);
+  border-bottom: none;
+}
+
+.toolbar-badge {
+  display: block;
+  font-size: 0.7rem;
+  color: #94A3B8;
+  font-weight: 600;
+}
+
+.toolbar-botoes {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-toolbar {
+  background-color: #334155;
+  color: #FFFFFF;
+  border: 1px solid #475569;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  min-height: 32px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-toolbar:hover {
+  background-color: var(--primary);
+}
+
+.btn-fechar {
+  background-color: var(--danger);
+  border-color: var(--danger);
+}
+
+.btn-fechar:hover {
+  background-color: #B91C1C;
+}
+
+/* Moldura Exata do Smartphone com as cores do prototipo */
+.smartphone-frame {
+  width: 398px;
+  height: 760px;
+  background-color: #0F172A;
+  border-radius: 0 0 36px 36px;
+  border: 4px solid var(--primary-dark);
+  border-top: none;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  padding: 12px 4px 20px 4px;
+}
+
+.phone-speaker {
+  width: 50px;
+  height: 4px;
+  background-color: #334155;
+  border-radius: 2px;
+  margin-bottom: 8px;
+}
+
+.phone-camera {
+  position: absolute;
+  top: 14px;
+  right: 120px;
+  width: 8px;
+  height: 8px;
+  background-color: #1E293B;
+  border-radius: 50%;
+}
+
+.phone-screen {
+  width: 390px;
+  height: 720px;
+  background-color: #FFFFFF;
+  border-radius: 24px;
+  overflow: hidden;
+  border: none;
+}
+
+.phone-home-indicator {
+  width: 120px;
+  height: 4px;
+  background-color: #475569;
+  border-radius: 2px;
+  margin-top: 8px;
+}

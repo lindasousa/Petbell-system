@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Petbell - Salvamento de Animais de Rua</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#4e996d">
+  <meta name="description" content="Plataforma PWA e Web para geracao rapida de alertas e salvamento de animais abandonados em Sorocaba.">
+
+  <!-- Manifesto PWA -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/icon-192.png">
+
+  <!-- Estilos Globais do Leaflet para o Mapa de Ocorrencias -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+</head>
+<body>
+  <app-root></app-root>
+
+  <!-- Registro do Service Worker para PWA -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => {
+          console.warn('Registro de Service Worker nao ativado no ambiente atual:', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>

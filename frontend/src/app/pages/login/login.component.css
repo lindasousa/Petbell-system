@@ -1,0 +1,65 @@
+.login-container {
+  padding: 24px 16px;
+  padding-bottom: 84px;
+}
+
+.login-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 6px;
+}
+
+.login-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+
+.tabs-tipo {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+  background-color: #F1F5F9;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.tab-btn {
+  flex: 1;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background-color: var(--bg-white);
+  color: var(--primary-dark);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.login-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+
+.link-cadastro {
+  display: inline-block;
+  margin-top: 6px;
+  color: var(--primary-dark);
+  font-weight: 800;
+  text-decoration: underline;
+  min-height: 44px;
+  line-height: 44px;
+}

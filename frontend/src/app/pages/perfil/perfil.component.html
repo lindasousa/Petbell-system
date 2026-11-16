@@ -1,0 +1,69 @@
+<main class="perfil-container" role="main" aria-label="Perfil do usuario e historico de alertas pessoais">
+  <div *ngIf="carregando" class="loading-state" aria-live="polite">
+    Carregando dados da sua conta...
+  </div>
+
+  <div *ngIf="!carregando && usuario" class="perfil-content">
+    <div class="perfil-header-card">
+      <div class="avatar-box">
+        {{ usuario.nome.slice(0, 2).toUpperCase() }}
+      </div>
+      <div class="perfil-dados-topo">
+        <h1 class="perfil-nome">{{ usuario.nome }}</h1>
+        <span class="badge-tipo">{{ usuario.tipo.toUpperCase() }}</span>
+      </div>
+    </div>
+
+    <!-- Informacoes do Perfil (LGPD - visiveis apenas ao titular) -->
+    <div class="info-card">
+      <h2 class="info-titulo">Dados da Conta (Protegidos pela LGPD)</h2>
+      <div class="info-linha">
+        <strong>E-mail:</strong> {{ usuario.email }}
+      </div>
+      <div class="info-linha">
+        <strong>Telefone de Seguranca:</strong> {{ usuario.telefone }}
+      </div>
+    </div>
+
+    <!-- Seus Alertas e Status (Exclusivo para o titular) -->
+    <section class="meus-alertas-section" aria-label="Historico de alertas criados por voce">
+      <h2 class="secao-titulo">Meus Alertas e Situacao</h2>
+
+      <div *ngIf="meusAlertas.length === 0" class="sem-alertas">
+        <p>Voce ainda nao publicou nenhum alerta associado a sua conta.</p>
+        <a routerLink="/criar-alerta" class="link-criar-alerta">Publicar Alerta Agora</a>
+      </div>
+
+      <article *ngFor="let alerta of meusAlertas" class="meu-alerta-card">
+        <div class="meu-alerta-topo">
+          <strong class="meu-alerta-titulo">{{ alerta.titulo }}</strong>
+          <span class="badge" [class.badge-success]="alerta.status_pet === 'RESGATADO'" [class.badge-warn]="alerta.status_pet !== 'RESGATADO'">
+            {{ alerta.status_pet }}
+          </span>
+        </div>
+        <p class="meu-alerta-local">Local: {{ alerta.localizacao }}</p>
+
+        <div class="meu-alerta-acoes">
+          <a [routerLink]="['/alerta', alerta.id]" class="btn-acao-alerta">
+            Ver Detalhes e Chat
+          </a>
+          <button
+            *ngIf="alerta.status_pet !== 'RESGATADO' && alerta.status_pet !== 'ADOTADO'"
+            type="button"
+            class="btn-resolver"
+            (click)="marcarComoResolvido(alerta)"
+          >
+            Marcar Encontrado / Resgatado
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <!-- Botao de Logout / Encerramento de Sessao -->
+    <div class="logout-wrapper">
+      <button type="button" class="btn-logout-conta" (click)="logout()">
+        Encerrar Sessao da Conta
+      </button>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,104 @@
+<main class="cadastro-container" role="main" aria-label="Formulario de criacao de conta">
+  <h1 class="cadastro-title">Criar Conta no Petbell</h1>
+  <p class="cadastro-subtitle">
+    Junte-se a rede solidaria de salvamento de animais em Sorocaba.
+  </p>
+
+  <div
+    *ngIf="mensagemErroServidor"
+    class="error-msg"
+    role="alert"
+    aria-live="assertive"
+    style="margin-bottom: 16px;"
+  >
+    <span class="error-badge">AVISO</span>
+    {{ mensagemErroServidor }}
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="submeter()" novalidate>
+    <!-- Tipo de Conta -->
+    <div class="form-group">
+      <label for="tipo">Tipo de Conta *</label>
+      <select id="tipo" formControlName="tipo">
+        <option value="cidadao">Cidadao / Voluntario</option>
+        <option value="ong">ONG / Abrigo Protetor</option>
+      </select>
+    </div>
+
+    <!-- Nome Completo ou Razao da ONG -->
+    <div class="form-group">
+      <label for="nome">Nome Completo ou Nome da ONG *</label>
+      <input
+        type="text"
+        id="nome"
+        formControlName="nome"
+        placeholder="Ex: Carlos Silva ou ONG Patinhas Sorocaba"
+        [class.error-input]="f['nome'].invalid && f['nome'].touched"
+      />
+      <div class="error-msg" *ngIf="f['nome'].invalid && f['nome'].touched" role="alert">
+        O nome deve ter no minimo 3 caracteres.
+      </div>
+    </div>
+
+    <!-- E-mail -->
+    <div class="form-group">
+      <label for="email">E-mail para Login *</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        placeholder="seu.email@exemplo.com"
+        [class.error-input]="f['email'].invalid && f['email'].touched"
+      />
+      <div class="error-msg" *ngIf="f['email'].invalid && f['email'].touched" role="alert">
+        Informe um e-mail valido.
+      </div>
+    </div>
+
+    <!-- Telefone -->
+    <div class="form-group">
+      <label for="telefone">Telefone de Contato (Privado no Perfil) *</label>
+      <input
+        type="tel"
+        id="telefone"
+        formControlName="telefone"
+        placeholder="(15) 99999-9999"
+        [class.error-input]="f['telefone'].invalid && f['telefone'].touched"
+      />
+      <div class="error-msg" *ngIf="f['telefone'].invalid && f['telefone'].touched" role="alert">
+        Telefone de contato e obrigatorio.
+      </div>
+    </div>
+
+    <!-- Senha -->
+    <div class="form-group">
+      <label for="senha">Senha Segura (minimo 6 caracteres) *</label>
+      <input
+        type="password"
+        id="senha"
+        formControlName="senha"
+        placeholder="Crie uma senha forte"
+        [class.error-input]="f['senha'].invalid && f['senha'].touched"
+      />
+      <div class="error-msg" *ngIf="f['senha'].invalid && f['senha'].touched" role="alert">
+        A senha deve conter no minimo 6 caracteres.
+      </div>
+    </div>
+
+    <!-- LGPD Aviso de Privacidade -->
+    <div class="lgpd-box">
+      <strong>Privacidade e LGPD:</strong> Seus dados de contato nao serao exibidos publicamente nos alertas. O contato comunitário ocorre exclusivamente pelo chat interno do sistema.
+    </div>
+
+    <button type="submit" class="btn-primary" [disabled]="cadastrando">
+      {{ cadastrando ? 'Finalizando Cadastro...' : 'Concluir Cadastro' }}
+    </button>
+  </form>
+
+  <div class="cadastro-footer">
+    <p>Ja possui cadastro no Petbell?</p>
+    <a routerLink="/login" class="link-voltar-login">
+      Acessar conta existente
+    </a>
+  </div>
+</main>

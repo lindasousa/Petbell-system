@@ -1,0 +1,122 @@
+<main class="feed-container" role="main" aria-label="Feed de ocorrencias de animais">
+  <!-- Barra de Busca Rápida -->
+  <div class="search-bar">
+    <label for="campo-busca" class="sr-only">Buscar por titulo ou bairro em Sorocaba</label>
+    <input
+      id="campo-busca"
+      type="text"
+      [(ngModel)]="termoBusca"
+      (keyup.enter)="carregarAlertas()"
+      placeholder="Buscar por bairro ou animal..."
+    />
+    <button class="btn-search" (click)="carregarAlertas()" aria-label="Executar busca">
+      Filtrar
+    </button>
+  </div>
+
+  <!-- Barra de Filtros por Chips Padronizada -->
+  <div class="filter-bar" role="toolbar" aria-label="Filtros de status do animal">
+    <button
+      class="chip-filter"
+      [class.active]="statusSelecionado === 'TODOS'"
+      (click)="selecionarFiltro('TODOS')"
+      aria-label="Filtrar todos os alertas"
+    >
+      Todos ({{ totalTodos }})
+    </button>
+    <button
+      class="chip-filter"
+      [class.active]="statusSelecionado === 'PERDI_MEU_PET'"
+      (click)="selecionarFiltro('PERDI_MEU_PET')"
+      aria-label="Filtrar animais perdidos"
+    >
+      Perdidos ({{ totalPerdidos }})
+    </button>
+    <button
+      class="chip-filter"
+      [class.active]="statusSelecionado === 'RESGATADO'"
+      (click)="selecionarFiltro('RESGATADO')"
+      aria-label="Filtrar animais resgatados"
+    >
+      Resgatados ({{ totalResgatados }})
+    </button>
+    <button
+      class="chip-filter"
+      [class.active]="statusSelecionado === 'ADOCAO'"
+      (click)="selecionarFiltro('ADOCAO')"
+      aria-label="Filtrar animais para adocao"
+    >
+      Adocao
+    </button>
+  </div>
+
+  <!-- Botao de Alternancia de Visualizacao do Mapa -->
+  <div class="map-toggle-wrapper">
+    <button
+      class="btn-toggle-map"
+      (click)="alternarVisualizacaoMapa()"
+      [attr.aria-expanded]="exibirMapa"
+      aria-controls="mapa-regiao"
+    >
+      {{ exibirMapa ? 'Ocultar Mapa de Pinos' : 'Exibir Mapa Interativo' }}
+    </button>
+  </div>
+
+  <!-- Mapa Geolocalizado com Pinos de Ocorrencias -->
+  <section id="mapa-regiao" *ngIf="exibirMapa">
+    <app-mapa [alertas]="alertas"></app-mapa>
+  </section>
+
+  <!-- Indicador de Carregamento -->
+  <div *ngIf="carregando" class="loading-state" aria-live="polite">
+    Carregando alertas de Sorocaba...
+  </div>
+
+  <!-- Estado Vazio -->
+  <div *ngIf="!carregando && alertas.length === 0" class="empty-state" aria-live="polite">
+    <p>Nenhuma ocorrencia localizada com os filtros selecionados.</p>
+  </div>
+
+  <!-- Lista de Cards de Alertas -->
+  <section class="cards-list" *ngIf="!carregando">
+    <article
+      *ngFor="let alerta of alertas"
+      class="card"
+      [routerLink]="['/alerta', alerta.id]"
+      role="link"
+      [attr.aria-label]="'Ocorrencia: ' + alerta.titulo + ', Status: ' + alerta.status_pet"
+      tabindex="0"
+    >
+      <div class="card-img-container">
+        <img
+          *ngIf="alerta.foto_url; else semFoto"
+          [src]="alerta.foto_url"
+          [alt]="'Foto do pet: ' + alerta.titulo"
+          class="card-img"
+          loading="lazy"
+        />
+        <ng-template #semFoto>
+          <div class="card-img-placeholder">
+            Foto do Pet: {{ alerta.titulo }}
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="card-body">
+        <span class="badge" [ngClass]="obterClasseBadge(alerta.status_pet)">
+          STATUS: {{ formatarRotuloStatus(alerta.status_pet) }}
+        </span>
+
+        <h2 class="card-title">{{ alerta.titulo }}</h2>
+        <p class="card-meta">Local: {{ alerta.localizacao }}</p>
+
+        <div class="card-footer-info">
+          <span class="card-date">{{ alerta.created_at | date:'dd/MM/yyyy HH:mm' }}</span>
+          <span *ngIf="alerta._count?.mensagens" class="card-chat-count">
+            {{ alerta._count?.mensagens }} mensagens
+          </span>
+        </div>
+      </div>
+    </article>
+  </section>
+</main>

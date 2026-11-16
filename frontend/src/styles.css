@@ -1,0 +1,263 @@
+/* 
+ * Estilos Globais do Sistema Petbell
+ * Em conformidade com o prototipo visual e as diretrizes de acessibilidade WCAG 2.2
+ */
+
+:root {
+  --primary: #4e996d;          /* Verde acessivel com alto contraste */
+  --primary-dark: #064E3B;     /* Verde floresta para bordas e titulos */
+  --accent: #CA8A04;           /* Amarelo/Dourado escuro para contraste > 4.5:1 */
+  --accent-bg: #FEF9C3;        /* Amarelo claro para fundos */
+  --bg-white: #FFFFFF;
+  --bg-app: #F1F5F9;
+  --text-dark: #1E293B;        /* Texto principal escuro */
+  --text-muted: #64748B;       /* Texto secundario */
+  --danger: #991B1B;           /* Vermelho escuro de alerta */
+  --danger-bg: #FEF2F2;        /* Fundo de erro */
+  --border: #CBD5E1;           /* Borda cinza suave */
+  --focus: #0284C7;            /* Azul de foco de alta visibilidade */
+  --font-base: 16px;           /* Texto minimo 16px conforme WCAG */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: var(--font-base);
+}
+
+body {
+  background-color: var(--bg-app);
+  color: var(--text-dark);
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+/* Indicador de Foco Acessivel para Navegacao por Teclado */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Container Principal do Website e PWA */
+.app-container {
+  width: 100%;
+  max-width: 1200px;
+  min-height: 100vh;
+  background-color: var(--bg-white);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  margin: 0 auto;
+}
+
+/* Modo Smartphone PWA: quando exibido dentro da moldura ou popup */
+.app-container.modo-pwa-ativo {
+  max-width: 480px;
+  min-height: 100vh;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+/* No Website Desktop normal, oculta a barra de navegacao inferior fixa */
+@media (min-width: 769px) {
+  .app-container:not(.modo-pwa-ativo) app-bottom-nav {
+    display: none;
+  }
+}
+
+/* Em telas mobile ou no modo PWA, a barra inferior e obrigatoria e visivel */
+@media (max-width: 768px) {
+  .app-container {
+    max-width: 100%;
+    box-shadow: none;
+  }
+  app-bottom-nav {
+    display: block;
+  }
+}
+
+.app-container.modo-pwa-ativo app-bottom-nav {
+  display: block !important;
+}
+
+
+/* Areas de Toque Minimas de 44x44px para Ergonomia WCAG 2.2 */
+button,
+.nav-link,
+.chip-filter,
+.btn-action {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Rótulos e Campos de Formulario Padronizados */
+label {
+  display: block;
+  font-weight: 700;
+  color: var(--text-dark);
+  font-size: 1rem;
+  margin-bottom: 6px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text-dark);
+  background-color: var(--bg-white);
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--primary);
+}
+
+.input-error {
+  border-color: var(--danger) !important;
+  background-color: var(--danger-bg) !important;
+}
+
+/* Mensagens de Erro Acessiveis com Alto Contraste */
+.error-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--danger);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: 6px;
+  padding: 8px 12px;
+  background-color: var(--danger-bg);
+  border-radius: 6px;
+  border: 1.5px solid var(--danger);
+}
+
+/* Badges de Status do Animal Padronizadas */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-warn {
+  background-color: var(--accent-bg);
+  color: #713F12;
+  border: 1.5px solid var(--accent);
+}
+
+.badge-success {
+  background-color: #ECFDF5;
+  color: var(--primary-dark);
+  border: 1.5px solid var(--primary);
+}
+
+.badge-danger {
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border: 1.5px solid var(--danger);
+}
+
+.badge-neutral {
+  background-color: #E2E8F0;
+  color: var(--text-dark);
+  border: 1.5px solid var(--border);
+}
+
+/* Botoes de Acao Primarios */
+.btn-primary {
+  width: 100%;
+  min-height: 52px;
+  background-color: var(--primary);
+  color: #FFFFFF;
+  font-size: 1.05rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+}
+
+.btn-primary:disabled {
+  background-color: var(--border);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+/* Alertas de Feedback no Topo */
+.toast-feedback {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 90%;
+  width: 400px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.toast-feedback.sucesso {
+  background-color: #ECFDF5;
+  color: var(--primary-dark);
+  border: 2px solid var(--primary);
+}
+
+.toast-feedback.erro {
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border: 2px solid var(--danger);
+}
+
+/* Ocultacao Acessivel de Texto para Leitores de Tela (Screen Readers) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

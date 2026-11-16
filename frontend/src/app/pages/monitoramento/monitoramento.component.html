@@ -1,0 +1,71 @@
+<main class="monitoramento-container" role="main" aria-label="Painel de monitoramento exclusivo para ONGs">
+  <div class="header-monitoramento">
+    <h1 class="monitoramento-title">Painel de Monitoramento</h1>
+    <span class="badge-exclusivo">ACESSO RESTRITO A ONGS</span>
+  </div>
+  <p class="monitoramento-subtitle">
+    Controle central de ocorrencias e alteracao de status em tempo real em Sorocaba.
+  </p>
+
+  <div *ngIf="carregando" class="loading-state" aria-live="polite">
+    Consolidando metricas e alertas...
+  </div>
+
+  <div *ngIf="!carregando" class="monitoramento-content">
+    <!-- Grid de Metricas Consolidadas -->
+    <section class="metricas-grid" *ngIf="estatisticas" aria-label="Resumo numerico de resgates">
+      <div class="card-metrica">
+        <span class="metrica-numero">{{ estatisticas.total_alertas }}</span>
+        <span class="metrica-rotulo">Total Ocorrencias</span>
+      </div>
+      <div class="card-metrica destaque-verde">
+        <span class="metrica-numero">{{ estatisticas.resgatados }}</span>
+        <span class="metrica-rotulo">Resgatados</span>
+      </div>
+      <div class="card-metrica destaque-amarelo">
+        <span class="metrica-numero">{{ estatisticas.perdidos + estatisticas.abandonados }}</span>
+        <span class="metrica-rotulo">Necessitam Resgate</span>
+      </div>
+      <div class="card-metrica">
+        <span class="metrica-numero">{{ estatisticas.taxa_resolucao_percentual }}%</span>
+        <span class="metrica-rotulo">Taxa Resolucao</span>
+      </div>
+    </section>
+
+    <!-- Tabela / Lista Gerencial de Alertas -->
+    <section class="gestao-alertas-section" aria-label="Gerenciamento de status dos alertas">
+      <h2 class="secao-titulo">Gerenciamento Direto de Status</h2>
+
+      <div class="alerta-item-gerencial" *ngFor="let alerta of alertas">
+        <div class="info-topo">
+          <span class="id-alerta">#{{ alerta.id }}</span>
+          <strong class="titulo-alerta">{{ alerta.titulo }}</strong>
+        </div>
+
+        <p class="meta-alerta">Local: {{ alerta.localizacao }}</p>
+
+        <!-- Seletor Rapido de Status Exclusivo para ONG -->
+        <div class="controle-status-row">
+          <label [for]="'status-select-' + alerta.id" class="sr-only">Alterar status da ocorrencia {{ alerta.titulo }}</label>
+          <select
+            [id]="'status-select-' + alerta.id"
+            [ngModel]="alerta.status_pet"
+            (ngModelChange)="alterarStatusDireto(alerta, $event)"
+            [disabled]="atualizandoId === alerta.id"
+            class="select-status-rapido"
+          >
+            <option value="ABANDONADO">ABANDONADO</option>
+            <option value="PERDI_MEU_PET">PERDI MEU PET</option>
+            <option value="ADOCAO">EM ADOCAO</option>
+            <option value="RESGATADO">RESGATADO</option>
+            <option value="ADOTADO">ADOTADO</option>
+          </select>
+
+          <a [routerLink]="['/alerta', alerta.id]" class="btn-ver-detalhe">
+            Ver Alerta
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</main>

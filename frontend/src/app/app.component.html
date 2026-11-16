@@ -1,0 +1,36 @@
+<!-- Notificacao Flutuante Acessivel (Toast) -->
+<aside
+  *ngIf="notificationService.notificacao$ | async as notif"
+  class="toast-feedback"
+  [ngClass]="notif.tipo"
+  role="status"
+  aria-live="polite"
+>
+  <span>{{ notif.texto }}</span>
+  <button
+    type="button"
+    class="btn-fechar-toast"
+    (click)="notificationService.fechar()"
+    aria-label="Fechar notificacao"
+  >
+    X
+  </button>
+</aside>
+
+<!-- Frame da Aplicacao Web e PWA -->
+<div class="app-container" [class.modo-pwa-ativo]="modoPwaAtivo">
+  <!-- Cabecalho Superior com Menu Desktop e Gatilho do PWA -->
+  <app-header></app-header>
+
+  <!-- Area Central com Scroll -->
+  <div class="content-scrollable">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!-- Barra de Navegacao Inferior (Mobile e PWA) -->
+  <app-bottom-nav></app-bottom-nav>
+</div>
+
+<!-- Modal Simulador de Smartphone PWA para Avaliacao Academica -->
+<app-simulador-pwa *ngIf="!modoPwaAtivo"></app-simulador-pwa>
+

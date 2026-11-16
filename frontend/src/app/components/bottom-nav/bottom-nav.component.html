@@ -1,0 +1,47 @@
+<nav class="bottom-nav" role="navigation" aria-label="Navegacao principal do aplicativo">
+  <!-- Botao 1: Feed -->
+  <a routerLink="/feed" routerLinkActive="active" class="nav-btn" aria-label="Feed de ocorrencias e alertas">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="22" height="22">
+      <circle cx="11" cy="11" r="8"></circle>
+      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+    </svg>
+    <span class="nav-label">Feed</span>
+  </a>
+
+  <!-- Botao 2: Criar Alerta -->
+  <a routerLink="/criar-alerta" routerLinkActive="active" class="nav-btn" aria-label="Registrar novo alerta de animal">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="22" height="22">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="16"></line>
+      <line x1="8" y1="12" x2="16" y2="12"></line>
+    </svg>
+    <span class="nav-label">Criar</span>
+  </a>
+
+  <!-- Botao 3: Gestao / Monitoramento -->
+  <ng-container *ngIf="authService.isOngOuAdmin(); else navCidadao">
+    <a routerLink="/monitoramento" routerLinkActive="active" class="nav-btn" aria-label="Painel de monitoramento da ONG">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="22" height="22">
+        <path d="M12 20v-6M6 20V10M18 20V4"></path>
+      </svg>
+      <span class="nav-label">Monitoramento</span>
+    </a>
+  </ng-container>
+  <ng-template #navCidadao>
+    <a routerLink="/perfil" routerLinkActive="active" class="nav-btn" aria-label="Meu historico e perfil">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="22" height="22">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span class="nav-label">Gestao</span>
+    </a>
+  </ng-template>
+
+  <!-- Botao 4: Doacoes -->
+  <a routerLink="/doacoes" routerLinkActive="active" class="nav-btn" aria-label="Campanhas de doacao ficticias">
+    <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" width="22" height="22">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+    </svg>
+    <span class="nav-label">Doacoes</span>
+  </a>
+</nav>

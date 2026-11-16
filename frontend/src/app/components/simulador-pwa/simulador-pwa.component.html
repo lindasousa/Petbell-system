@@ -1,0 +1,47 @@
+<!-- Overlay do Simulador de Smartphone PWA -->
+<div *ngIf="visivel" class="modal-simulador-overlay" role="dialog" aria-modal="true" aria-label="Simulador de Smartphone PWA Petbell">
+  <div class="simulador-painel">
+    <!-- Barra de Controle do Simulador -->
+    <div class="simulador-toolbar">
+      <div class="toolbar-info">
+        <strong>Simulador PWA Mobile</strong>
+        <span class="toolbar-badge">Modo Celular (390x750px)</span>
+      </div>
+      <div class="toolbar-botoes">
+        <button
+          type="button"
+          class="btn-toolbar"
+          (click)="abrirEmNovaJanela()"
+          aria-label="Abrir em janela independente do Windows"
+        >
+          Abrir em Janela Separada
+        </button>
+        <button
+          type="button"
+          class="btn-toolbar btn-fechar"
+          (click)="fechar()"
+          aria-label="Fechar simulador de smartphone"
+        >
+          Fechar [X]
+        </button>
+      </div>
+    </div>
+
+    <!-- Moldura de Smartphone (Mockup do Celular com borda e notch) -->
+    <div class="smartphone-frame">
+      <div class="phone-speaker"></div>
+      <div class="phone-camera"></div>
+
+      <!-- Iframe interno que renderiza a versao mobile interativa -->
+      <iframe
+        *ngIf="urlIframe"
+        [src]="urlIframe"
+        title="Aplicativo Petbell PWA em Modo Celular"
+        class="phone-screen"
+        frameborder="0"
+      ></iframe>
+
+      <div class="phone-home-indicator"></div>
+    </div>
+  </div>
+</div>

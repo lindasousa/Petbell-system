@@ -1,0 +1,94 @@
+<main class="login-container" role="main" aria-label="Tela de autenticacao de usuarios">
+  <h1 class="login-title">Acessar Petbell</h1>
+  <p class="login-subtitle">
+    Entre na sua conta para gerenciar seus alertas e apoiar o resgate animal.
+  </p>
+
+  <!-- Abas de Tipo de Acesso: Cidadao vs ONG -->
+  <div class="tabs-tipo" role="tablist">
+    <button
+      type="button"
+      role="tab"
+      class="tab-btn"
+      [class.active]="tipoSelecionado === 'cidadao'"
+      [attr.aria-selected]="tipoSelecionado === 'cidadao'"
+      (click)="alternarTipo('cidadao')"
+    >
+      Sou Cidadao
+    </button>
+    <button
+      type="button"
+      role="tab"
+      class="tab-btn"
+      [class.active]="tipoSelecionado === 'ong'"
+      [attr.aria-selected]="tipoSelecionado === 'ong'"
+      (click)="alternarTipo('ong')"
+    >
+      Sou ONG / Abrigo
+    </button>
+  </div>
+
+  <!-- Mensagem de Erro Vinda da Resposta do Servidor (ex: HTTP 401) -->
+  <div
+    *ngIf="mensagemErroServidor"
+    class="error-msg"
+    role="alert"
+    aria-live="assertive"
+    style="margin-bottom: 16px;"
+  >
+    <span class="error-badge">ERRO 401</span>
+    {{ mensagemErroServidor }}
+  </div>
+
+  <!-- Formulario de Login -->
+  <form [formGroup]="formulario" (ngSubmit)="submeter()" novalidate>
+    <div class="form-group">
+      <label for="email">E-mail Cadastrado *</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        placeholder="exemplo@email.com"
+        [class.error-input]="f['email'].invalid && f['email'].touched"
+        autocomplete="email"
+      />
+      <div
+        class="error-msg"
+        *ngIf="f['email'].invalid && f['email'].touched"
+        role="alert"
+      >
+        Informe um e-mail valido.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="senha">Senha de Acesso *</label>
+      <input
+        type="password"
+        id="senha"
+        formControlName="senha"
+        placeholder="Digite sua senha segura"
+        [class.error-input]="f['senha'].invalid && f['senha'].touched"
+        autocomplete="current-password"
+      />
+      <div
+        class="error-msg"
+        *ngIf="f['senha'].invalid && f['senha'].touched"
+        role="alert"
+      >
+        A senha deve ter no minimo 6 caracteres.
+      </div>
+    </div>
+
+    <button type="submit" class="btn-primary" [disabled]="processando">
+      {{ processando ? 'Validando Acesso...' : 'Entrar na Conta' }}
+    </button>
+  </form>
+
+  <div class="login-footer">
+    <p>Ainda nao tem uma conta cadastrada?</p>
+    <a routerLink="/cadastro" class="link-cadastro">
+      Criar conta de {{ tipoSelecionado === 'ong' ? 'ONG Protetora' : 'Cidadao' }}
+    </a>
+  </div>
+</main>

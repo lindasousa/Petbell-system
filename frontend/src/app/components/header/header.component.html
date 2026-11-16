@@ -1,0 +1,68 @@
+<header class="app-header" role="banner">
+  <div class="logo-container">
+    <a routerLink="/feed" class="logo-link" aria-label="Ir para a pagina inicial do Petbell">
+      <svg class="header-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="24" height="24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/>
+      </svg>
+      <span class="logo-text">Petbell</span>
+    </a>
+    
+    <ng-container *ngIf="authService.usuarioAtual$ | async as usuario">
+      <span *ngIf="usuario.tipo === 'ong'" class="badge-role" aria-label="Perfil de Organizacao Nao Governamental">
+        PAINEL ONG
+      </span>
+      <span *ngIf="usuario.tipo === 'administrador'" class="badge-role" aria-label="Perfil de Administrador">
+        ADMIN
+      </span>
+    </ng-container>
+  </div>
+
+  <!-- Navegacao Principal do Website para Desktop -->
+  <nav class="desktop-nav" aria-label="Navegacao do website">
+    <a routerLink="/feed" routerLinkActive="active-link" class="desktop-nav-link">Feed de Alertas</a>
+    <a routerLink="/criar-alerta" routerLinkActive="active-link" class="desktop-nav-link">Criar Alerta</a>
+    <a routerLink="/doacoes" routerLinkActive="active-link" class="desktop-nav-link">Doações</a>
+    <a *ngIf="authService.isOngOuAdmin()" routerLink="/monitoramento" routerLinkActive="active-link" class="desktop-nav-link">
+      Monitoramento ONG
+    </a>
+  </nav>
+
+  <div class="header-actions">
+    <!-- Botao em Destaque para Abrir o Simulador de Smartphone PWA -->
+    <button
+      type="button"
+      class="btn-pwa"
+      (click)="abrirSimuladorCelular()"
+      aria-label="Abrir versao smartphone do aplicativo PWA"
+      title="Testar interface mobile no simulador de celular"
+    >
+      <svg class="phone-svg" viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true">
+        <path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/>
+      </svg>
+      <span class="btn-pwa-text">Versão Smartphone (PWA)</span>
+    </button>
+
+    <ng-container *ngIf="authService.usuarioAtual$ | async as usuario; else btnLogin">
+      <div class="user-menu">
+        <a routerLink="/perfil" class="btn-profile" [attr.aria-label]="'Acessar perfil de ' + usuario.nome">
+          {{ usuario.nome.split(' ')[0] }}
+        </a>
+        <button class="btn-logout" (click)="logout()" aria-label="Encerrar sessao">
+          Sair
+        </button>
+      </div>
+    </ng-container>
+
+    <ng-template #btnLogin>
+      <div class="auth-buttons">
+        <a routerLink="/login" class="btn-login" aria-label="Entrar na conta de Cidadao ou ONG">
+          Entrar
+        </a>
+        <a routerLink="/cadastro" class="btn-cadastro desktop-only" aria-label="Cadastrar nova conta">
+          Cadastrar
+        </a>
+      </div>
+    </ng-template>
+  </div>
+</header>
+
