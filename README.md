@@ -1,6 +1,6 @@
 # Petbell - Sistema de Alerta e Salvamento de Animais de Rua
 
-Projeto Acadêmico Full-Stack | Padrão MVC | Node.js + Express + Zod + Prisma ORM + PostgreSQL | Angular 18 (PWA e Web)
+Projeto Acadêmico Full-Stack | Padrão MVC | Node.js + Express + Zod + Prisma ORM + Nosql | Angular 18 (PWA e Web)
 
 ---
 
@@ -109,9 +109,9 @@ Petbell/
 
 ### Passo 1: Configurar e Subir o Back-end (Servidor de Dados / API)
 1. Abra um terminal PowerShell na pasta `c:\Users\[NOME]\Documents\Petbell\backend`.
-2. Configure a variável `DATABASE_URL` no arquivo `.env` com a sua senha do PostgreSQL:
+2. Configure a variável `DATABASE_URL` no arquivo `.env` com a sua senha do Nosql:
    ```env
-   DATABASE_URL="postgresql://postgres:sua_senha@localhost:5432/petbell_db?schema=public"
+   DATABASE_URL="mongodb://usuario:sua_senha@localhost:27017/petbell_db?authSource=admin""
    ```
 3. Instale as dependências:
    ```powershell
