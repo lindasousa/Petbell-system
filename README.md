@@ -101,59 +101,11 @@ Petbell/
 ```
 
 ---
-
-## 3. Modelo do Banco de Dados PostgreSQL (Prisma ORM)
-
-O banco armazena apenas dados necessários à finalidade do sistema:
-
-1. **Tabela `usuarios`:**
-   - `id`: Inteiro (Chave Primária)
-   - `nome`: String (Nome ou Razão da ONG)
-   - `tipo`: String (`cidadao`, `ong`, `administrador`)
-   - `email`: String (Único)
-   - `senha_hash`: String (Processada via `bcryptjs` com salt)
-   - `telefone`: String (Uso interno de segurança, protegido por LGPD)
-   - `created_at`: DateTime
-
-2. **Tabela `pets`:**
-   - `id`: Inteiro (Chave Primária)
-   - `nome`: String (Opcional)
-   - `especie`: String (Canina, Felina, etc.)
-   - `raca`: String (Opcional)
-   - `idade`: Inteiro (Opcional)
-   - `foto_url`: String (URL da imagem)
-   - `status_pet`: Enum (`RESGATADO`, `ADOTADO`, `ADOCAO`, `ABANDONADO`, `PERDI_MEU_PET`)
-   - `usuario_id`: Inteiro (Chave Estrangeira Opcional, permite `null`)
-   - `created_at`: DateTime
-
-3. **Tabela `alertas`:**
-   - `id`: Inteiro (Chave Primária)
-   - `titulo`: Varchar(100) (Nome ou descrição curta do animal)
-   - `descricao`: Texto (Informações do estado do animal)
-   - `localizacao`: String (Bairro)
-   - `latitude`: Float (Coordenada geográfica)
-   - `longitude`: Float (Coordenada geográfica)
-   - `foto_url`: String (Opcional)
-   - `status_pet`: Enum (`RESGATADO`, `ADOTADO`, `ADOCAO`, `ABANDONADO`, `PERDI_MEU_PET`)
-   - `usuario_id`: Inteiro (Chave Estrangeira Opcional, permite `null`)
-   - `pet_id`: Inteiro (Chave Estrangeira Opcional com deleção em cascata)
-   - `created_at`: DateTime
-
-4. **Tabela `mensagens_comunidade`:**
-   - `id`: Inteiro (Chave Primária)
-   - `alerta_id`: Inteiro (Chave Estrangeira vinculada a `alertas`)
-   - `autor_nome`: String
-   - `autor_tipo`: String (`comunidade`, `ong`, `cidadao`)
-   - `conteudo`: Texto (Mensagem pública do chat)
-   - `created_at`: DateTime
-
----
-
-## 4. Instruções Passo a Passo para Execução no Windows
+## 3. Instruções Passo a Passo para Execução no Windows
 
 ### Pré-requisitos
 - Node.js instalado (v18 ou superior).
-- PostgreSQL instalado e em execução (ou container Docker).
+- NoSQL instalado e em execução (ou container Docker).
 
 ### Passo 1: Configurar e Subir o Back-end (Servidor de Dados / API)
 1. Abra um terminal PowerShell na pasta `c:\Users\[NOME]\Documents\Petbell\backend`.
