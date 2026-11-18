@@ -1,0 +1,16 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build front-end e back-end
+        run: npm run build
+      - name: Verificar sintaxe do back-end
+        run: node --check backend/src/server.js && node --check backend/src/app.js

@@ -1,0 +1,13 @@
+{
+  "name": "petbell",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Petbell - build e inicializacao unificados (front-end Angular servido pelo back-end Express) para deploy no Railway",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm ci --prefix frontend --include=dev && npm run build --prefix frontend && npm ci --prefix backend && npm run prisma:generate --prefix backend",
+    "start": "npm run start:prod --prefix backend"
+  }
+}

@@ -3,9 +3,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// Conexao com a fonte de dados PostgreSQL com suporte a PostGIS
+// Conexao com o banco de dados NoSQL MongoDB (MongoDB Atlas)
+// Os relacionamentos e acoes de exclusao (SetNull/Cascade) sao emulados pelo Prisma.
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -18,9 +19,9 @@ enum StatusPet {
   PERDI_MEU_PET
 }
 
-// Modelo de Usuario (Cidadao, ONG ou Administrador)
+// Documento de Usuario (Cidadao, ONG ou Administrador)
 model Usuario {
-  id         Int       @id @default(autoincrement())
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
   nome       String
   tipo       String    // "cidadao", "ong", "administrador"
   email      String    @unique
@@ -35,9 +36,9 @@ model Usuario {
   @@map("usuarios")
 }
 
-// Modelo de Perfil do Pet
+// Documento de Perfil do Pet
 model Pet {
-  id         Int        @id @default(autoincrement())
+  id         String     @id @default(auto()) @map("_id") @db.ObjectId
   nome       String?
   especie    String?
   raca       String?
@@ -46,9 +47,9 @@ model Pet {
   status_pet StatusPet  @default(ABANDONADO)
   created_at DateTime   @default(now())
 
-  // Chave estrangeira nula: permite criacao de alerta de animal sem usuario cadastrado
-  usuario_id Int?
-  usuario    Usuario?   @relation(fields: [usuario_id], references: [id], onDelete: SetNull)
+  // Referencia opcional: permite criacao de alerta de animal sem usuario cadastrado
+  usuario_id String?    @db.ObjectId
+  usuario    Usuario?   @relation(fields: [usuario_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
   // Relacionamento com Alertas associados a este Pet
   alertas    Alerta[]
@@ -56,11 +57,11 @@ model Pet {
   @@map("pets")
 }
 
-// Modelo de Alerta de Ocorrencia de Animal
+// Documento de Alerta de Ocorrencia de Animal
 model Alerta {
-  id          Int                  @id @default(autoincrement())
-  titulo      String               @db.VarChar(100)
-  descricao   String               @db.Text
+  id          String               @id @default(auto()) @map("_id") @db.ObjectId
+  titulo      String
+  descricao   String
   localizacao String
   latitude    Float
   longitude   Float
@@ -68,29 +69,30 @@ model Alerta {
   status_pet  StatusPet            @default(ABANDONADO)
   created_at  DateTime             @default(now())
 
-  // Chave estrangeira nula: permite geracao rapida de alerta sem cadastro previo
-  usuario_id  Int?
-  usuario     Usuario?             @relation(fields: [usuario_id], references: [id], onDelete: SetNull)
+  // Referencia opcional: permite geracao rapida de alerta sem cadastro previo
+  usuario_id  String?              @db.ObjectId
+  usuario     Usuario?             @relation(fields: [usuario_id], references: [id], onDelete: SetNull, onUpdate: NoAction)
 
-  // Vinculo opcional com a tabela Pet
-  pet_id      Int?
-  pet         Pet?                 @relation(fields: [pet_id], references: [id], onDelete: Cascade)
+  // Vinculo opcional com a colecao de Pets
+  pet_id      String?              @db.ObjectId
+  pet         Pet?                 @relation(fields: [pet_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   // Mensagens do chat comunitario deste alerta
   mensagens   MensagemComunidade[]
 
   @@index([latitude, longitude], name: "idx_alerta_coordenadas")
+  @@index([created_at])
   @@map("alertas")
 }
 
-// Modelo para o Chat Comunitario do Alerta (evita exposicao de telefones publicos)
+// Documento do Chat Comunitario do Alerta (evita exposicao de telefones publicos)
 model MensagemComunidade {
-  id         Int      @id @default(autoincrement())
-  alerta_id  Int
-  alerta     Alerta   @relation(fields: [alerta_id], references: [id], onDelete: Cascade)
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  alerta_id  String   @db.ObjectId
+  alerta     Alerta   @relation(fields: [alerta_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   autor_nome String
   autor_tipo String   @default("comunidade") // "comunidade", "ong", "tutor"
-  conteudo   String   @db.Text
+  conteudo   String
   created_at DateTime @default(now())
 
   @@map("mensagens_comunidade")

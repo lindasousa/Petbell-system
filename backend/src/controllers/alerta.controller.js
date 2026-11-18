@@ -4,6 +4,7 @@
  */
 
 const prisma = require("../config/database");
+const { idValido } = require("../utils/objectId");
 
 /**
  * Lista alertas com filtros opcionais de status, busca textual e ordenacao recente
@@ -74,8 +75,8 @@ async function listar(req, res, next) {
  */
 async function buscarPorId(req, res, next) {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id)) {
+    const id = req.params.id;
+    if (!idValido(id)) {
       return res.status(400).json({
         sucesso: false,
         mensagem: "Identificador de alerta invalido.",
@@ -195,10 +196,10 @@ async function criar(req, res, next) {
  */
 async function atualizarStatus(req, res, next) {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
     const { status_pet } = req.body;
 
-    if (isNaN(id)) {
+    if (!idValido(id)) {
       return res.status(400).json({
         sucesso: false,
         mensagem: "Identificador de alerta invalido.",
@@ -259,7 +260,13 @@ async function atualizarStatus(req, res, next) {
  */
 async function listarMensagens(req, res, next) {
   try {
-    const alertaId = parseInt(req.params.id, 10);
+    const alertaId = req.params.id;
+    if (!idValido(alertaId)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Identificador de alerta invalido.",
+      });
+    }
 
     const mensagens = await prisma.mensagemComunidade.findMany({
       where: { alerta_id: alertaId },
@@ -280,8 +287,15 @@ async function listarMensagens(req, res, next) {
  */
 async function adicionarMensagem(req, res, next) {
   try {
-    const alertaId = parseInt(req.params.id, 10);
+    const alertaId = req.params.id;
     const { conteudo, autor_nome } = req.body;
+
+    if (!idValido(alertaId)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Identificador de alerta invalido.",
+      });
+    }
 
     const alertaExiste = await prisma.alerta.findUnique({
       where: { id: alertaId },

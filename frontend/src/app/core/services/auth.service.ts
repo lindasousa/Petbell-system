@@ -12,7 +12,8 @@ import { Usuario, RespostaApi } from '../models/alerta.model';
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly apiUrl = 'http://localhost:3000/api/auth';
+  // URL relativa: em producao a API esta na mesma origem; em desenvolvimento o proxy.conf.json encaminha para :3000
+  private readonly apiUrl = '/api/auth';
   private readonly tokenKey = 'petbell_jwt_token';
   private readonly userKey = 'petbell_usuario';
 

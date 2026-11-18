@@ -4,6 +4,7 @@
  */
 
 const prisma = require("../config/database");
+const { idValido } = require("../utils/objectId");
 
 /**
  * Lista pets cadastrados com filtro opcional por status
@@ -44,7 +45,14 @@ async function listar(req, res, next) {
  */
 async function buscarPorId(req, res, next) {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = req.params.id;
+    if (!idValido(id)) {
+      return res.status(400).json({
+        sucesso: false,
+        mensagem: "Identificador de pet invalido.",
+      });
+    }
+
     const pet = await prisma.pet.findUnique({
       where: { id },
       include: {

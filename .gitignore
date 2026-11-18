@@ -25,6 +25,9 @@ tmp/
 out-tsc/
 bazel-out/
 
+# Prints da entrega academica (nao fazem parte do deploy)
+prints-entrega/
+
 # Logs e Relatorios de Execucao
 logs/
 *.log

@@ -10,6 +10,13 @@ const bcrypt = require("bcryptjs");
 const prisma = new PrismaClient();
 
 async function main() {
+  // Protecao para producao: nao apaga dados existentes, a menos que SEED_FORCE=true
+  const totalUsuarios = await prisma.usuario.count();
+  if (totalUsuarios > 0 && process.env.SEED_FORCE !== "true") {
+    console.log("Banco ja possui dados. Seed ignorado (defina SEED_FORCE=true para recriar).");
+    return;
+  }
+
   console.log("Iniciando semeamento do banco de dados Petbell...");
 
   // Limpeza previa das tabelas em ordem de dependencia
@@ -21,6 +28,10 @@ async function main() {
   // Geracao de senhas com hash e salt de 10 rounds (bcrypt)
   const salt = await bcrypt.genSalt(10);
   const senhaHashPadrao = await bcrypt.hash("petbell123", salt);
+  // Em producao, a senha do administrador vem de variavel de ambiente (nao fica no codigo)
+  const senhaHashAdmin = process.env.SEED_ADMIN_PASSWORD
+    ? await bcrypt.hash(process.env.SEED_ADMIN_PASSWORD, salt)
+    : senhaHashPadrao;
 
   // 1. Criacao dos Usuarios de Referencia
   const ongUsuario = await prisma.usuario.create({
@@ -48,7 +59,7 @@ async function main() {
       nome: "Administrador Central Petbell",
       tipo: "administrador",
       email: "admin@petbell.org",
-      senha_hash: senhaHashPadrao,
+      senha_hash: senhaHashAdmin,
       telefone: "(15) 3000-9999",
     },
   });

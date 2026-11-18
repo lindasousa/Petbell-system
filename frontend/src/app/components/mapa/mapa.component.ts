@@ -3,8 +3,18 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { Alerta } from '../../core/models/alerta.model';
 
-// Declaracao global do Leaflet carregado via CDN / Bundle
-declare const L: any;
+// Leaflet importado do pacote npm (incluido no bundle da aplicacao)
+import * as L from 'leaflet';
+
+// Converte caracteres especiais em entidades HTML para exibir texto com seguranca
+function escaparHtml(texto: string | null | undefined): string {
+  return String(texto ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 @Component({
   selector: 'app-mapa',
@@ -121,11 +131,12 @@ export class MapaComponent implements OnInit, OnDestroy, OnChanges {
         title: alerta.titulo,
       });
 
+      // Textos digitados por usuarios sao escapados antes de entrar no HTML do popup (anti-XSS)
       const popupConteudo = `
         <div style="font-family: sans-serif; font-size: 14px; min-width: 160px;">
-          <strong style="color: #1E293B; font-size: 15px;">${alerta.titulo}</strong>
-          <div style="margin: 4px 0; color: #64748B; font-size: 12px;">Local: ${alerta.localizacao}</div>
-          <div style="margin-bottom: 8px; font-weight: bold; color: ${corPino}; font-size: 12px;">Status: ${alerta.status_pet}</div>
+          <strong style="color: #1E293B; font-size: 15px;">${escaparHtml(alerta.titulo)}</strong>
+          <div style="margin: 4px 0; color: #64748B; font-size: 12px;">Local: ${escaparHtml(alerta.localizacao)}</div>
+          <div style="margin-bottom: 8px; font-weight: bold; color: ${corPino}; font-size: 12px;">Status: ${escaparHtml(alerta.status_pet)}</div>
           <button id="btn-popup-${alerta.id}" style="width:100%; min-height:36px; background:#4e996d; color:#fff; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">
             Ver Ocorrencia
           </button>

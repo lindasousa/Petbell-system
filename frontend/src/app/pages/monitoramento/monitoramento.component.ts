@@ -17,7 +17,7 @@ export class MonitoramentoComponent implements OnInit {
   public estatisticas: any = null;
   public alertas: Alerta[] = [];
   public carregando: boolean = true;
-  public atualizandoId: number | null = null;
+  public atualizandoId: string | null = null;
 
   constructor(
     private alertaService: AlertaService,
@@ -61,7 +61,7 @@ export class MonitoramentoComponent implements OnInit {
         this.atualizandoId = null;
         if (resposta.sucesso) {
           alerta.status_pet = novoStatus;
-          this.notificationService.sucesso(`Status do alerta #${alerta.id} alterado com sucesso.`);
+          this.notificationService.sucesso(`Status do alerta #${alerta.id.slice(-6)} alterado com sucesso.`);
           this.recalcularEstatisticasLocais();
         }
       },

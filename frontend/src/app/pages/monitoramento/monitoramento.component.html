@@ -38,7 +38,7 @@
 
       <div class="alerta-item-gerencial" *ngFor="let alerta of alertas">
         <div class="info-topo">
-          <span class="id-alerta">#{{ alerta.id }}</span>
+          <span class="id-alerta">#{{ alerta.id | slice:-6 }}</span>
           <strong class="titulo-alerta">{{ alerta.titulo }}</strong>
         </div>
 

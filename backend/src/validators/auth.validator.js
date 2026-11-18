@@ -12,8 +12,9 @@ const cadastroSchema = z.object({
     .trim()
     .min(3, "O nome deve ter no minimo 3 caracteres.")
     .max(120, "O nome deve ter no maximo 120 caracteres."),
-  tipo: z.enum(["cidadao", "ong", "administrador"], {
-    errorMap: () => ({ message: "O tipo de usuario deve ser 'cidadao', 'ong' ou 'administrador'." }),
+  // "administrador" nao e aceito no cadastro publico (evita escalonamento de privilegio)
+  tipo: z.enum(["cidadao", "ong"], {
+    errorMap: () => ({ message: "O tipo de usuario deve ser 'cidadao' ou 'ong'." }),
   }),
   email: z
     .string({ required_error: "O e-mail e obrigatorio." })

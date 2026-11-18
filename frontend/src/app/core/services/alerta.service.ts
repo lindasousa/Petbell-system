@@ -11,7 +11,8 @@ import { Alerta, MensagemComunidade, RespostaApi, StatusPet } from '../models/al
   providedIn: 'root',
 })
 export class AlertaService {
-  private readonly baseUrl = 'http://localhost:3000/api';
+  // URL relativa: em producao a API esta na mesma origem; em desenvolvimento o proxy.conf.json encaminha para :3000
+  private readonly baseUrl = '/api';
 
   constructor(private http: HttpClient) {}
 
@@ -34,7 +35,7 @@ export class AlertaService {
     return this.http.get<RespostaApi<Alerta[]>>(`${this.baseUrl}/alertas`, { params });
   }
 
-  public buscarPorId(id: number): Observable<RespostaApi<Alerta>> {
+  public buscarPorId(id: string): Observable<RespostaApi<Alerta>> {
     return this.http.get<RespostaApi<Alerta>>(`${this.baseUrl}/alertas/${id}`);
   }
 
@@ -42,17 +43,17 @@ export class AlertaService {
     return this.http.post<RespostaApi<Alerta>>(`${this.baseUrl}/alertas`, dados);
   }
 
-  public atualizarStatus(id: number, status_pet: StatusPet): Observable<RespostaApi<Alerta>> {
+  public atualizarStatus(id: string, status_pet: StatusPet): Observable<RespostaApi<Alerta>> {
     return this.http.patch<RespostaApi<Alerta>>(`${this.baseUrl}/alertas/${id}/status`, {
       status_pet,
     });
   }
 
-  public listarMensagens(alertaId: number): Observable<RespostaApi<MensagemComunidade[]>> {
+  public listarMensagens(alertaId: string): Observable<RespostaApi<MensagemComunidade[]>> {
     return this.http.get<RespostaApi<MensagemComunidade[]>>(`${this.baseUrl}/alertas/${alertaId}/mensagens`);
   }
 
-  public enviarMensagem(alertaId: number, conteudo: string, autor_nome?: string): Observable<RespostaApi<MensagemComunidade>> {
+  public enviarMensagem(alertaId: string, conteudo: string, autor_nome?: string): Observable<RespostaApi<MensagemComunidade>> {
     return this.http.post<RespostaApi<MensagemComunidade>>(`${this.baseUrl}/alertas/${alertaId}/mensagens`, {
       conteudo,
       autor_nome,

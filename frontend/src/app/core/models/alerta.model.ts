@@ -12,7 +12,7 @@ export type StatusPet =
   | 'PERDI_MEU_PET';
 
 export interface Usuario {
-  id: number;
+  id: string;
   nome: string;
   email: string;
   tipo: TipoUsuario;
@@ -22,20 +22,20 @@ export interface Usuario {
 }
 
 export interface Pet {
-  id: number;
+  id: string;
   nome: string | null;
   especie: string | null;
   raca: string | null;
   idade: number | null;
   foto_url: string | null;
   status_pet: StatusPet;
-  usuario_id: number | null;
+  usuario_id: string | null;
   created_at: string;
 }
 
 export interface MensagemComunidade {
-  id: number;
-  alerta_id: number;
+  id: string;
+  alerta_id: string;
   autor_nome: string;
   autor_tipo: string;
   conteudo: string;
@@ -43,7 +43,7 @@ export interface MensagemComunidade {
 }
 
 export interface Alerta {
-  id: number;
+  id: string;
   titulo: string;
   descricao: string;
   localizacao: string;
@@ -51,12 +51,12 @@ export interface Alerta {
   longitude: number;
   foto_url: string | null;
   status_pet: StatusPet;
-  usuario_id: number | null;
-  pet_id: number | null;
+  usuario_id: string | null;
+  pet_id: string | null;
   created_at: string;
   pet?: Pet;
   usuario?: {
-    id: number;
+    id: string;
     nome: string;
     tipo: TipoUsuario;
   };

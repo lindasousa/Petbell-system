@@ -24,10 +24,10 @@ async function encerrarServidor(sinal) {
   server.close(async () => {
     try {
       await prisma.$disconnect();
-      console.log("Conexao com PostgreSQL desconectada com sucesso.");
+      console.log("Conexao com MongoDB desconectada com sucesso.");
       process.exit(0);
     } catch (err) {
-      console.error("Erro ao encerrar conexao com PostgreSQL:", err);
+      console.error("Erro ao encerrar conexao com MongoDB:", err);
       process.exit(1);
     }
   });

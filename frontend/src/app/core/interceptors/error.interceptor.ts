@@ -27,7 +27,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else if (error.status === 429) {
         mensagemErro = 'Muitas requisicoes consecutivas. Aguarde alguns minutos.';
       } else if (error.status === 0) {
-        mensagemErro = 'Nao foi possivel conectar ao servidor da API Petbell (localhost:3000).';
+        mensagemErro = 'Nao foi possivel conectar ao servidor da API Petbell. Verifique sua conexao.';
       }
 
       notificationService.erro(mensagemErro);

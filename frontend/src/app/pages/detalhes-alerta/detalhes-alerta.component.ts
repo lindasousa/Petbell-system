@@ -34,13 +34,13 @@ export class DetalhesAlertaComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.carregarDadosAlerta(id);
     }
   }
 
-  public carregarDadosAlerta(id: number): void {
+  public carregarDadosAlerta(id: string): void {
     this.carregando = true;
     this.alertaService.buscarPorId(id).subscribe({
       next: (resposta) => {

@@ -4,12 +4,11 @@
  * e suporte basico a funcionamento offline.
  */
 
-const CACHE_NAME = "petbell-cache-v1";
+const CACHE_NAME = "petbell-cache-v2";
 const RECURSOS_ESTATICOS = [
   "/",
   "/index.html",
-  "/manifest.webmanifest",
-  "/styles.css"
+  "/manifest.webmanifest"
 ];
 
 // Instalacao do Service Worker
@@ -40,6 +39,13 @@ self.addEventListener("activate", (evento) => {
 self.addEventListener("fetch", (evento) => {
   // Ignora requisicoes nao-GET
   if (evento.request.method !== "GET") return;
+
+  // Recursos de outros dominios (fotos, tiles do mapa) sao buscados direto pelo navegador:
+  // a CSP do service worker so permite requisicoes para a propria origem
+  if (new URL(evento.request.url).origin !== self.location.origin) return;
+
+  // Nao guarda em cache respostas autenticadas (dados pessoais do usuario logado)
+  if (evento.request.headers.has("Authorization")) return;
 
   evento.respondWith(
     fetch(evento.request)

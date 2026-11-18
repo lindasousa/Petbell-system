@@ -1,6 +1,6 @@
 # Petbell - Sistema de Alerta e Salvamento de Animais de Rua
 
-Projeto Acadêmico Full-Stack | Padrão MVC | Node.js + Express + Zod + Prisma ORM + Nosql | Angular 18 (PWA e Web)
+Projeto Acadêmico Full-Stack | Padrão MVC | Node.js + Express + Zod + Prisma ORM + MongoDB (NoSQL) | Angular 18 (PWA e Web)
 
 ---
 
@@ -24,7 +24,7 @@ O **Petbell** é uma plataforma desenvolvida para conectar a população, volunt
 Petbell/
 │
 ├── backend/                             # Camada de Servidor (Node.js + Express + MVC)
-│   ├── .env                             # Variaveis de ambiente (Porta, JWT, PostgreSQL)
+│   ├── .env                             # Variaveis de ambiente (Porta, JWT, MongoDB)
 │   ├── .env.example
 │   ├── package.json
 │   ├── prisma/
@@ -101,25 +101,73 @@ Petbell/
 ```
 
 ---
-## 3. Instruções Passo a Passo para Execução no Windows
+
+## 3. Modelo do Banco de Dados NoSQL MongoDB (Prisma ORM)
+
+O banco é um MongoDB hospedado no MongoDB Atlas (plano gratuito M0). Cada entidade é uma coleção de documentos; os identificadores são `ObjectId` e as referências entre coleções (e as ações de exclusão `SetNull`/`Cascade`) são gerenciadas pelo Prisma ORM. O banco armazena apenas dados necessários à finalidade do sistema:
+
+1. **Coleção `usuarios`:**
+   - `id`: ObjectId (Identificador do documento, `_id`)
+   - `nome`: String (Nome ou Razão da ONG)
+   - `tipo`: String (`cidadao`, `ong`, `administrador`)
+   - `email`: String (Único)
+   - `senha_hash`: String (Processada via `bcryptjs` com salt)
+   - `telefone`: String (Uso interno de segurança, protegido por LGPD)
+   - `created_at`: DateTime
+
+2. **Coleção `pets`:**
+   - `id`: ObjectId (Identificador do documento, `_id`)
+   - `nome`: String (Opcional)
+   - `especie`: String (Canina, Felina, etc.)
+   - `raca`: String (Opcional)
+   - `idade`: Inteiro (Opcional)
+   - `foto_url`: String (URL da imagem)
+   - `status_pet`: Enum (`RESGATADO`, `ADOTADO`, `ADOCAO`, `ABANDONADO`, `PERDI_MEU_PET`)
+   - `usuario_id`: ObjectId (Referência opcional a `usuarios`, permite `null`)
+   - `created_at`: DateTime
+
+3. **Coleção `alertas`:**
+   - `id`: ObjectId (Identificador do documento, `_id`)
+   - `titulo`: String de até 100 caracteres (Nome ou descrição curta do animal)
+   - `descricao`: Texto (Informações do estado do animal)
+   - `localizacao`: String (Bairro)
+   - `latitude`: Float (Coordenada geográfica)
+   - `longitude`: Float (Coordenada geográfica)
+   - `foto_url`: String (Opcional)
+   - `status_pet`: Enum (`RESGATADO`, `ADOTADO`, `ADOCAO`, `ABANDONADO`, `PERDI_MEU_PET`)
+   - `usuario_id`: ObjectId (Referência opcional a `usuarios`, permite `null`)
+   - `pet_id`: ObjectId (Referência opcional a `pets`, com exclusão em cascata)
+   - `created_at`: DateTime
+
+4. **Coleção `mensagens_comunidade`:**
+   - `id`: ObjectId (Identificador do documento, `_id`)
+   - `alerta_id`: ObjectId (Referência ao documento em `alertas`)
+   - `autor_nome`: String
+   - `autor_tipo`: String (`comunidade`, `ong`, `cidadao`)
+   - `conteudo`: Texto (Mensagem pública do chat)
+   - `created_at`: DateTime
+
+---
+
+## 4. Instruções Passo a Passo para Execução no Windows
 
 ### Pré-requisitos
 - Node.js instalado (v18 ou superior).
-- NoSQL instalado e em execução (ou container Docker).
+- Um cluster MongoDB (recomendado: MongoDB Atlas, plano gratuito M0 — o Prisma exige replica set, que o Atlas já fornece).
 
 ### Passo 1: Configurar e Subir o Back-end (Servidor de Dados / API)
 1. Abra um terminal PowerShell na pasta `c:\Users\[NOME]\Documents\Petbell\backend`.
-2. Configure a variável `DATABASE_URL` no arquivo `.env` com a sua senha do Nosql:
+2. Configure a variável `DATABASE_URL` no arquivo `.env` com a string de conexão do MongoDB Atlas:
    ```env
-   DATABASE_URL="mongodb://usuario:sua_senha@localhost:27017/petbell_db?authSource=admin""
+   DATABASE_URL="mongodb+srv://usuario:senha@cluster.mongodb.net/petbell_db?retryWrites=true&w=majority"
    ```
 3. Instale as dependências:
    ```powershell
    npm.cmd install
    ```
-4. Crie a estrutura no banco de dados e execute o semeamento inicial (Seed):
+4. Crie as coleções e índices no banco e execute o semeamento inicial (Seed):
    ```powershell
-   npx.cmd prisma migrate dev --name init
+   npx.cmd prisma db push
    npm.cmd run prisma:seed
    ```
 5. Inicie o servidor da API:

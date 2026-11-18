@@ -9,7 +9,7 @@ const prisma = require("../config/database");
 /**
  * Retorna estatisticas consolidadas para o painel de monitoramento da ONG
  * Otimizacao estrutural: utiliza agregacao por grupo no banco de dados para consolidar
- * metricas de status em um unico round-trip de rede e conexao ao PostgreSQL.
+ * metricas de status em um unico round-trip de rede e conexao ao MongoDB.
  */
 async function obterEstatisticas(req, res, next) {
   try {
